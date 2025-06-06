@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact - Portfolio</title>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+  <style>
+    /* Your existing CSS here */
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #0a192f;
+      color: #8892b0;
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Sidebar */
+    #left-sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 260px;
+      height: 100vh;
+      background-color: rgba(10, 25, 47, 0.85);
+      padding: 2rem 1rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transform: translateX(-280px);
+      transition: transform 0.3s ease;
+      z-index: 1000;
+      box-shadow: 4px 0 12px rgba(0,0,0,0.7);
+      backdrop-filter: blur(10px);
+    }
+
+    #left-sidebar.show {
+      transform: translateX(0);
+    }
+
+    #left-sidebar img {
+      width: 60px;
+      margin-bottom: 1.5rem;
+      align-self: center;
+    }
+
+    #left-sidebar nav a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #ccd6f6;
+      text-decoration: none;
+      font-weight: 600;
+      margin-bottom: 1.2rem;
+      font-size: 1.05rem;
+      border-radius: 5px;
+      padding: 8px 10px;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    #left-sidebar nav a.active,
+    #left-sidebar nav a:hover {
+      background-color: rgba(100, 255, 218, 0.1);
+      color: #64ffda;
+    }
+
+    /* Close button inside sidebar */
+    #sidebar-close-btn {
+      align-self: flex-end;
+      background: transparent;
+      border: none;
+      font-size: 1.8rem;
+      color: #8892b0;
+      cursor: pointer;
+      margin-bottom: 1rem;
+      transition: color 0.3s;
+    }
+    #sidebar-close-btn:hover {
+      color: #64ffda;
+    }
+
+    /* Social media at bottom */
+    #sidebar-social {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    #sidebar-social a img {
+      width: 28px;
+      filter: brightness(0.8);
+      transition: filter 0.3s ease;
+    }
+
+    #sidebar-social a:hover img {
+      filter: brightness(1);
+    }
+
+    /* Main content */
+    main {
+      margin-left: 0;
+      padding: 2rem 3rem;
+      flex-grow: 1;
+      transition: margin-left 0.3s ease;
+      width: 100%;
+    }
+
+    /* Header - Updated Design */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 900;
+      background: rgba(10, 25, 47, 0.85);
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+      font-weight: 600;
+      color: #ccd6f6;
+      font-size: 1.1rem;
+      letter-spacing: 0.04em;
+      user-select: none;
+      backdrop-filter: blur(10px);
+    }
+
+    header nav {
+      display: flex;
+      gap: 2rem;
+    }
+
+    header nav a {
+      color: #ccd6f6;
+      text-decoration: none;
+      position: relative;
+      padding-bottom: 4px;
+      transition: color 0.3s ease;
+    }
+    header nav a:hover,
+    header nav a:focus {
+      color: #64ffda;
+    }
+    header nav a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      left: 0;
+      bottom: 0;
+      background: #64ffda;
+      transition: width 0.3s ease;
+    }
+    header nav a:hover::after,
+    header nav a:focus::after {
+      width: 100%;
+    }
+
+    /* Sidebar toggle button */
+    #sidebar-toggle-btn {
+      background: none;
+      border: none;
+      color: #ccd6f6;
+      font-size: 2rem;
+      cursor: pointer;
+      display: block;
+      transition: color 0.3s ease;
+    }
+    #sidebar-toggle-btn:hover {
+      color: #64ffda;
+    }
+
+    /* Hide toggle button when sidebar is visible */
+    #sidebar-toggle-btn.hidden {
+      display: none;
+    }
+
+    /* Contact Form Styles - Updated */
+    h1 {
+      margin-bottom: 1.5rem;
+      color: #ccd6f6;
+      text-align: center;
+      font-weight: 700;
+      letter-spacing: 1px;
+      font-size: 2.5rem;
+      position: relative;
+      padding-bottom: 0.5rem;
+    }
+    
+    h1::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: #64ffda;
+      border-radius: 2px;
+    }
+
+    form {
+      max-width: 550px;
+      margin: 2rem auto;
+      background: rgba(17, 34, 64, 0.8);
+      padding: 2.5rem;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(100, 255, 218, 0.15);
+      border: 1px solid rgba(100, 255, 218, 0.2);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #ccd6f6;
+      font-size: 1.05rem;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    textarea {
+      width: 100%;
+      padding: 0.9rem 1rem;
+      margin-bottom: 1.5rem;
+      border-radius: 6px;
+      border: 1px solid rgba(100, 255, 218, 0.3);
+      background-color: rgba(10, 25, 47, 0.8);
+      color: #ccd6f6;
+      font-size: 1rem;
+      resize: vertical;
+      transition: all 0.3s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #64ffda;
+      box-shadow: 0 0 0 2px rgba(100, 255, 218, 0.2);
+    }
+
+    button[type="submit"] {
+      background-color: transparent;
+      color: #64ffda;
+      font-weight: 700;
+      padding: 0.9rem 1.8rem;
+      border: 1px solid #64ffda;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      width: 100%;
+      letter-spacing: 1px;
+    }
+
+    button[type="submit"]:hover {
+      background-color: rgba(100, 255, 218, 0.1);
+      transform: translateY(-2px);
+    }
+
+    /* Confirmation message */
+    #confirmation {
+      margin-top: 1.5rem;
+      color: #64ffda;
+      font-weight: 600;
+      text-align: center;
+      display: none;
+      padding: 0.8rem;
+      border-radius: 4px;
+      background: rgba(100, 255, 218, 0.1);
+    }
+  </style>
+  <!-- Add EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <script>
+    (function(){
+      emailjs.init("tOigbqBx57D2UYtCU"); // Replace YOUR_USER_ID here
+    })();
+  </script>
+</head>
+<body>
+  <!-- Left Sidebar -->
+  <aside id="left-sidebar" aria-label="Sidebar navigation" aria-hidden="true">
+    <button id="sidebar-close-btn" aria-label="Close sidebar"><i class="fas fa-times"></i></button>
+    <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub Logo" />
+    <nav>
+      <a href="index.html"><i class="fas fa-home"></i> Home</a>
+      <a href="resume.html"><i class="fas fa-file-alt"></i> Resume</a>
+      <a href="portfolio.html"><i class="fas fa-briefcase"></i> Portfolio</a>
+      <a href="contact.html" class="active"><i class="fas fa-envelope"></i> Contact</a>
+      <a href="https://github.com/johndoe" target="_blank" rel="noopener"><i class="fab fa-github"></i> GitHub</a>
+      <a href="https://linkedin.com/in/johndoe" target="_blank" rel="noopener"><i class="fab fa-linkedin"></i> LinkedIn</a>
+    </nav>
+
+    <div id="sidebar-social">
+      <a href="https://linkedin.com/in/johndoe" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn" />
+      </a>
+      <a href="https://github.com/johndoe" target="_blank" rel="noopener" aria-label="GitHub">
+        <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" alt="GitHub" />
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main>
+    <!-- Header -->
+    <header>
+      <button id="sidebar-toggle-btn" aria-label="Open sidebar">
+        <i class="fas fa-bars"></i>
+      </button>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="resume.html">Resume</a>
+        <a href="blog.html" target="_blank" rel="noopener">Blog</a>
+        <a href="contact.html">Contact</a>
+        
+      </nav>
+    </header>
+
+    <section id="contact-section" aria-label="Contact form">
+      <h1>Contact Me</h1>
+      <form id="contact-form">
+        <label for="name">Name</label>
+        <input id="name" name="name" type="text" required placeholder="Your full name" />
+
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" required placeholder="Your email address" />
+
+        <label for="message">Message</label>
+        <textarea
+          id="message"
+          name="message"
+          rows="7"
+          required
+          placeholder="Write your message here"
+        ></textarea>
+
+        <button type="submit">Send Message</button>
+      </form>
+      <div id="confirmation" role="alert" aria-live="polite"></div>
+    </section>
+  </main>
+   <footer style="width:100%;background:rgba(10,25,47,0.97);border-top:2px solid #64ffda;color:#8892b0;font-size:1.05rem;letter-spacing:0.5px;box-shadow:0 -2px 16px rgba(10,25,47,0.10);display:flex;justify-content:center;align-items:center;padding:1.2rem 0;margin-top:2rem;position:fixed;left:0;bottom:0;z-index:100;">
+    <div style="display:flex;align-items:center;gap:1.2rem;">
+      <span>&copy; 2025 John Doe &mdash; Built with <span style="color:#64ffda;">Passion</span></span>
+      <a href="https://github.com/goswamiharahit" target="_blank" aria-label="GitHub" style="margin-left:1.2rem;">
+        <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" alt="GitHub" style="width:28px;vertical-align:middle;border-radius:6px;background:#fff;padding:2px;">
+      </a>
+      <a href="https://linkedin.com/in/harshitgoswami9" target="_blank" aria-label="LinkedIn">
+        <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn" style="width:28px;vertical-align:middle;border-radius:6px;background:#fff;padding:2px;">
+      </a>
+      <a href="https://mail.google.com/mail/?view=cm&fs=1&to=harshitgoswami548@gmail.com"  target="_blank"aria-label="Email">
+        <img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" alt="Email" style="width:28px;vertical-align:middle;border-radius:6px;background:#fff;padding:2px;">
+      </a>
+    </div>
+  </footer>
+
+  <script>
+     const form = document.getElementById('contact-form');
+    const confirmation = document.getElementById('confirmation');
+
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      // Disable button to prevent multiple submissions
+      const submitButton = form.querySelector('button[type="submit"]');
+      submitButton.disabled = true;
+      submitButton.textContent = 'Sending...';
+
+      // Store form values before sending
+      const formData = {
+        name: form.name.value,
+        email: form.email.value,
+        message: form.message.value
+      };
+
+      // Clear form fields immediately
+      form.reset();
+
+      // Send email using EmailJS
+      emailjs
+        .send("service_69g0rmn", "template_0qh7ak2", {
+          name: formData.name,
+          reply_to: formData.email,
+          message: formData.message,
+        })
+        .then(() => {
+          // Show success message with enhanced visibility
+          confirmation.innerHTML = '<i class="fas fa-check-circle"></i> Thank you! Your message has been sent.';
+          confirmation.style.display = 'block';
+          confirmation.style.color = '#64ffda';
+          confirmation.style.padding = '1rem';
+          confirmation.style.fontSize = '1.1rem';
+          confirmation.style.backgroundColor = 'rgba(100, 255, 218, 0.1)';
+          confirmation.style.border = '1px solid rgba(100, 255, 218, 0.3)';
+          
+          // Hide confirmation message after 5 seconds
+          setTimeout(() => {
+            confirmation.style.display = 'none';
+          }, 10000);
+        })
+        .catch((error) => {
+          confirmation.textContent = 'Oops! Something went wrong. Please try again later.';
+          confirmation.style.display = 'block';
+          confirmation.style.color = '#ff6b6b';
+          console.error('EmailJS error:', error);
+        })
+        .finally(() => {
+          submitButton.disabled = false;
+          submitButton.textContent = 'Send Message';
+        });
+        
+      // Send auto-reply separately
+      emailjs.send("service_69g0rmn", "auto_reply", {
+        name: formData.name,
+        reply_to: formData.email,
+        message: formData.message
+      });
+    });
+  </script>
+</body>
+</html>
